@@ -36,30 +36,43 @@ export default class App extends React.Component<React.Props<App>, State> {
     }
 
     render() {
-        return (
-            <Grid fluid={true}>
-                {this.state.settings ?
+        if (this.state.settings) {
+            const { columnSize, dashboard } = this.state.settings;
+            const rowCount = Math.ceil(this.state.settings.dashboard.length / columnSize);
+
+            return (
+                <Grid fluid={true}>
                     <div>
                         <PageHeader>
                             <span>{this.state.settings.title}</span>
                         </PageHeader>
                         <Grid fluid={true}>
-                            <Row>
-                                {this.state.settings.dashboard.map(x => {
-                                    return (
-                                        <Col sm={12 / this.state.settings.columnSize}>
-                                            <Chart dashboardConfig={x} />
-                                        </Col>
-                                    );
-                                })
-                                }
-                            </Row>
+                            {_.range(rowCount).map(row => {
+                                return (
+                                    <Row>
+                                        {_.range(columnSize).map(x => {
+                                            const config = dashboard[row * columnSize + x];
+                                            if (config) {
+                                                return (
+                                                    <Col sm={12 / columnSize}>
+                                                        <Chart dashboardConfig={config} />
+                                                    </Col>
+                                                );
+                                            } else {
+                                                return <Col sm={12 / columnSize} />;
+                                            }
+                                        })
+                                        }
+                                    </Row>
+                                );
+                            }) }
                         </Grid>
                     </div>
-                    : <Spinner show={true} />
-                }
-            </Grid>
-        );
+                </Grid>
+            );
+        } else {
+            return <Spinner show={true} />;
+        }
     }
 }
 
