@@ -14,7 +14,7 @@ interface State {
     settings?: Settings;
 }
 
-class App extends React.Component<React.Props<App>, State> {
+export default class App extends React.Component<React.Props<App>, State> {
 
     state: State = {
         settings: null
@@ -63,4 +63,3 @@ class App extends React.Component<React.Props<App>, State> {
     }
 }
 
-React.render(<App />, document.getElementById('app'));

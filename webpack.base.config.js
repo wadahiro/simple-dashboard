@@ -18,7 +18,7 @@ objectAssign(env, {
 
 module.exports = {
   target: 'web',
-  entry: ['./src/App.tsx'],
+  entry: ['./src/index.tsx'],
   output: {
     path: path.join(__dirname, 'public/js'),
     publicPath: '/js/',
@@ -34,7 +34,7 @@ module.exports = {
       {
         test: /\.ts(x?)$/,
         exclude: [/node_modules/],
-        loader: 'babel-loader!ts-loader'
+        loaders: ['babel-loader', 'ts-loader']
       }
     ]
   },
@@ -53,6 +53,5 @@ module.exports = {
       __CURRENT_ENV__: "'" + (NODE_ENV) + "'"
     })
   ],
-  devtool: '#inline-source-map',
   cache: true
 }
