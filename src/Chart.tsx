@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Panel } from 'react-bootstrap';
+import { Panel, Glyphicon } from 'react-bootstrap';
 import { DashboardConfig, handleSource } from './Settings';
 import Spinner from './Spinner';
 
@@ -76,6 +76,27 @@ export default class Chart extends React.Component<Props, State> {
             });
         })
     }
+    
+    download = (e) => {
+        const labels = Object.keys(this.state.datasets);
+        
+        const csvHeader = ([this.props.dashboardConfig.xAxisLabel].concat(labels)).join(',');
+        const csvBody = this.state.xLabels.map((x, rowIndex) => {
+            return labels.reduce((s, label) => {
+                s.push(this.state.datasets[label][rowIndex]);
+                return s;
+            }, [x]).join(',');
+        }).join('\n');
+        
+        const blob = new Blob([ `${csvHeader}\n${csvBody}` ], { "type" : "text/plain" });
+        
+        if (window.navigator.msSaveBlob) { 
+            window.navigator.msSaveBlob(blob, `${this.props.dashboardConfig.label}.csv`); 
+        } else {
+            window.URL = window.URL || window['webkitURL'];
+            e.target.parentNode.href = window.URL.createObjectURL(blob);
+        }
+    };
 
     render() {
         const chartData = {
@@ -90,7 +111,7 @@ export default class Chart extends React.Component<Props, State> {
         };
 
         return (
-            <Panel header={this.props.dashboardConfig.label}>
+            <Panel header={<div>{this.props.dashboardConfig.label}{ chartData.labels.length > 0 && <a href='#' download={`${this.props.dashboardConfig.label}.csv`} onClick={this.download} className='pull-right'><Glyphicon glyph='cloud-download' /></a>}</div>}>
                 <Spinner show={this.state.loading} />
                 { chartData.labels.length > 0 &&
                     <div>

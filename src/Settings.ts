@@ -6,6 +6,8 @@ export interface Settings {
 
 export interface DashboardConfig {
     label: string;
+    xAxisLabel: string;
+    yAxisLabel: string;
     sources: (CSVSource | TextSource | JSONSource)[]
 }
 
