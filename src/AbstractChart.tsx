@@ -22,6 +22,8 @@ interface State {
     error?: string;
 }
 
+const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+
 abstract class AbstractChart extends React.Component<Props, State> {
     state = {
         loading: false,
@@ -137,7 +139,7 @@ abstract class AbstractChart extends React.Component<Props, State> {
             }, [x]).join(',');
         }).join('\n');
         
-        const blob = new Blob([ `${csvHeader}\n${csvBody}` ], { "type" : "text/plain" });
+        const blob = new Blob([ bom, `${csvHeader}\n${csvBody}` ], { "type" : "text/csv" });
         
         if (window.navigator.msSaveBlob) { 
             window.navigator.msSaveBlob(blob, `${this.props.dashboardConfig.label}.csv`); 
