@@ -71,9 +71,9 @@ abstract class AbstractChart extends React.Component<Props, State> {
                         .value();
 
                     results.forEach((coordinates, resultIndex) => {
-                        const label = this.props.dashboardConfig.sources[resultIndex].label;
+                        const { label, kind } = this.props.dashboardConfig.sources[resultIndex];
                         
-                        if (label) {
+                        if (label && !kind) {
                             let index = 0;
                             xLabels.forEach((xLabel) => {
                                 const p = coordinates[index];

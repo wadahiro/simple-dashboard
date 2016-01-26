@@ -34,6 +34,7 @@ export default class NVD3Chart extends AbstractChart {
                     .xScale(d3.time.scale())
                     .margin({ top: 50, right: 70, bottom: 50, left: 70 })
                     // .legendRightAxisHint(' [Using Right Axis]')
+                    // .showLegend(false)
                     .color(d3.scale.category10().range());
                 this.chart.xAxis.tickFormat(function(d) {
                     var d = d3.time.format('%Y/%m/%d')(new Date(d))
@@ -44,6 +45,8 @@ export default class NVD3Chart extends AbstractChart {
                     return d
                 })
                     .showMaxMin(false);
+
+                // this.chart.legend.width(500).height(50).margin({ top: 10, right: 30, left: 80, bottom: 50 })
                 // chart.y1Axis.tickFormat(function(d) { return '$' + d });
 
                 // chart.bars.forceY([0]).padData(false);
@@ -58,8 +61,11 @@ export default class NVD3Chart extends AbstractChart {
 
                     .transition().duration(500).call(this.chart);
 
+                // d3.select('.nv-legendWrap')
+                //     .attr('transform', 'translate(0,750)');
+
                 nv.utils.windowResize(this.chart.update);
-                this.chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
+
                 return this.chart;
             });
         }

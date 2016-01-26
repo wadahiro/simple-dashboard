@@ -50,17 +50,17 @@ export default class App extends React.Component<React.Props<App>, State> {
                         <Grid fluid={true}>
                             {_.range(rowCount).map(row => {
                                 return (
-                                    <Row>
+                                    <Row key={row}>
                                         {_.range(columnSize).map(x => {
                                             const config = dashboard[row * columnSize + x];
                                             if (config) {
                                                 return (
-                                                    <Col sm={12 / columnSize}>
+                                                    <Col key={`${row}_${x}`} sm={12 / columnSize}>
                                                         { renderChart(config) }
                                                     </Col>
                                                 );
                                             } else {
-                                                return <Col sm={12 / columnSize} />;
+                                                return <Col key={`${row}_${x}`} sm={12 / columnSize} />;
                                             }
                                         })
                                         }

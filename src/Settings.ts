@@ -21,6 +21,7 @@ interface CSVSource {
     url: string;
     delimiter: string;
     kind?: string;
+    kinds?: string;
     x: number;
     y: number;
     options: any;
@@ -32,6 +33,7 @@ export interface TextSource {
     url: string;
     pattern: string;
     kind?: string;
+    kinds?: string;
     x: number;
     y: number;
     options: any;
@@ -91,6 +93,9 @@ function handleCSVSource(source: CSVSource): Promise<Coordinates[]> {
         })
         .then(x => {
             return x.split('\n').map(x => {
+                if (x === '') {
+                    return null;
+                }
                 const values = x.split(source.delimiter);
 
                 // TODO check error
@@ -100,12 +105,17 @@ function handleCSVSource(source: CSVSource): Promise<Coordinates[]> {
                 };
 
                 if (source.kind) {
-                    coordinates.k = values[source.kind];
+                    const k = values[source.kind];;
+                    if (k.match(source.kinds)) {
+                        coordinates.k = k;
+                    } else {
+                        return null;
+                    }
                 }
 
                 return coordinates;
             })
-                .filter(x => x.x && x.x.length > 0);
+                .filter(x => x !== null && x.x && x.x.length > 0);
         })
 }
 
