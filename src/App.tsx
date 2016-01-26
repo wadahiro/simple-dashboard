@@ -22,7 +22,8 @@ export default class App extends React.Component<React.Props<App>, State> {
 
     loadSettings = async (): Promise<Settings> => {
         const response = await fetch('./settings.json');
-        const settings = await response.json();
+        const settings: Settings = await response.json();
+        document.title = settings.title;
         return Promise.resolve(settings);
     };
 
