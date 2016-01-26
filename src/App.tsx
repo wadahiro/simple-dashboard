@@ -6,7 +6,7 @@ import Spinner from './Spinner';
 import { Settings, DashboardConfig } from './Settings';
 import NVD3Chart from './NVD3Chart';
 
-require("babelify/polyfill");
+require("babel-polyfill");
 require('whatwg-fetch');
 
 

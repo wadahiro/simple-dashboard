@@ -11,7 +11,7 @@ config.entry.unshift('webpack/hot/only-dev-server')
 config.entry.unshift('webpack-dev-server/client?http://localhost:9000')
 
 config.module.loaders = config.module.loaders.map(function (loader) {
-  loader.loaders.unshift('react-hot')
+  loader.loader = 'react-hot!' + loader.loader
   return loader
 })
 

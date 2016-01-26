@@ -28,13 +28,15 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
+        cacheDirectory: true,
         exclude: [/node_modules/],
-        loaders: ['babel-loader?optional[]=runtime&stage=0']
+        loader: 'babel-loader?presets[]=es2015&presets[]=react'
       },
       {
         test: /\.ts(x?)$/,
+        cacheDirectory: true,
         exclude: [/node_modules/],
-        loaders: ['babel-loader', 'ts-loader']
+        loader: 'babel-loader?presets[]=es2015&presets[]=react!ts-loader'
       }
     ]
   },
@@ -46,12 +48,6 @@ module.exports = {
     'underscore': '_'
   },
   plugins: [
-    new webpack.DefinePlugin({
-      __DEV__: env.development,
-      __STAGING__: env.staging,
-      __PRODUCTION__: env.production,
-      __CURRENT_ENV__: "'" + (NODE_ENV) + "'"
-    })
   ],
   cache: true
 }
