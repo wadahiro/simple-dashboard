@@ -21,6 +21,12 @@ interface State {
 
 const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
 
+interface CSVRows {
+    [xLabel:string] : {
+        [yLabel:string]: number | string
+    };
+}
+
 abstract class AbstractChart extends React.Component<Props, State> {
     state = {
         loading: false,
@@ -61,29 +67,49 @@ abstract class AbstractChart extends React.Component<Props, State> {
     }
     
     download = (e) => {
-        // const labels = Object.keys(this.state.datasets);
+        const { dataSets } = this.state;
+        const { xAxisLabel, yAxisLabel } = this.props.dashboardConfig;
         
-        // const csvHeader = ([this.props.dashboardConfig.xAxisLabel].concat(labels)).join(',');
-        // const csvBody = this.state.xLabels.map((x, rowIndex) => {
-        //     return labels.reduce((s, label) => {
-        //         s.push(this.state.datasets[label][rowIndex]);
-        //         return s;
-        //     }, [x]).join(',');
-        // }).join('\n');
+        const categories = dataSets.map(x => x.key);
+        const csvHeader = ([xAxisLabel].concat(categories)).join(',');
         
-        // const blob = new Blob([ bom, `${csvHeader}\n${csvBody}` ], { "type" : "text/csv" });
+        let rows: CSVRows = {};
         
-        // if (window.navigator.msSaveBlob) { 
-        //     window.navigator.msSaveBlob(blob, `${this.props.dashboardConfig.label}.csv`); 
-        // } else {
-        //     window.URL = window.URL || window['webkitURL'];
-        //     e.target.parentNode.href = window.URL.createObjectURL(blob);
-        // }
+        dataSets.forEach(dataSet => {
+            dataSet.values.forEach(x => {
+                let values = rows[x.x];
+                if (!values) {
+                    values = {
+                        [dataSet.key]: x.x
+                    };
+                    rows[x.x] = values;
+                }
+                values[dataSet.key] = x.y;
+            });
+        });
+        
+        const csvBody = _.map(rows, (row, xLabel) => {
+            const values: any = categories.map(category => {
+                return typeof row[category] !== 'undefined' ? row[category] : '';
+            })
+            return [xLabel].concat(values);
+        });
+        
+        const csvBodyText = _.sortBy(csvBody, '0').map(row => row.join(',')).join('\n');
+        
+        const blob = new Blob([ bom, `${csvHeader}\n${csvBodyText}` ], { "type" : "text/csv" });
+        
+        if (window.navigator.msSaveBlob) { 
+            window.navigator.msSaveBlob(blob, `${this.props.dashboardConfig.label}.csv`); 
+        } else {
+            window.URL = window.URL || window['webkitURL'];
+            e.target.parentNode.href = window.URL.createObjectURL(blob);
+        }
     };
 
     render() {
         const { label } =this.props.dashboardConfig;
-        const { dataSets, loading } = this.state;
+        const { dataSets, loading, error } = this.state;
         const hasData = dataSets.length > 0;
 
         return (
@@ -94,12 +120,12 @@ abstract class AbstractChart extends React.Component<Props, State> {
                         { this.renderChart() }
                     </div>
                 }
-                { this.state.error && 
+                { error && 
                     <Alert bsStyle='danger'>
-                        <h4>{ this.state.error }</h4>
+                        <h4>{ error }</h4>
                     </Alert>
                 }
-                { !hasData && !loading &&
+                { !hasData && !loading && !error &&
                     <Alert bsStyle='info'>
                         <h4>No data</h4>
                     </Alert>

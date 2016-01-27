@@ -18,21 +18,35 @@ app.get('/example/unique-users.log', function (req, res) {
 app.get('/example/access-home.log', function (req, res) {
     setTimeout(function () {
         res.setHeader('Cache-Control', 'no-cache');
-        res.send('2016-01-19 10\n2016-01-21 0\n2016-01-22 20\n');
+        res.send(`
+2016-01-19 10
+2016-01-21 0
+2016-01-22 20
+`);
     }, 10);
 });
 
 app.get('/example/access-search.log', function (req, res) {
     setTimeout(function () {
         res.setHeader('Cache-Control', 'no-cache');
-        res.send('2016-01-19 20\n2016-01-20 23\n2016-01-21 10\n2016-01-22 50\n');
+        res.send(`
+2016-01-19 20
+2016-01-20 23
+2016-01-21 10
+2016-01-22 50
+`);
     }, 10);
 });
 
 app.get('/example/access-update.log', function (req, res) {
     setTimeout(function () {
         res.setHeader('Cache-Control', 'no-cache');
-        res.send('2016-01-19 25\n2016-01-20 23\n2016-01-21 10\n2016-01-22 60\n');
+        res.send(`
+2016-01-19 25
+2016-01-20 23
+2016-01-21 10
+2016-01-22 60
+`);
     }, 10);
 });
 
@@ -46,6 +60,21 @@ app.get('/example/new-users.log', function (req, res) {
             x = new Date(x)
             x = formatDate(x, 'YYYY-MM-DD')
             sb += x + ' ' + Math.floor(Math.random() * (50 - 10) + 10) + '\n';
+        }
+        res.send(sb);
+    }, 10);
+});
+
+app.get('/example/delete-users.log', function (req, res) {
+    setTimeout(function () {
+        res.setHeader('Cache-Control', 'no-cache');
+        var sb = '';
+        var x;
+        for (var i = 0; i < (365 * 5)/2; i++) {
+            x = 1425096000 + (i * 2) * 60 * 60 * 24 * 1000; // +1day
+            x = new Date(x)
+            x = formatDate(x, 'YYYY-MM-DD')
+            sb += x + ' ' + Math.floor(Math.random() * (20 - 10) + 10) + '\n';
         }
         res.send(sb);
     }, 10);
