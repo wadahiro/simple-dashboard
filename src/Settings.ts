@@ -165,15 +165,14 @@ function toDataSet(source: Source) {
                     if (!source.includesCategories || source.includesCategories.length === 0) {
                         return true;
                     }
-                    return _.contains(source.includesCategories, x.category);
+                    return _.includes(source.includesCategories, x.category);
                 })
                 .groupBy('category')
                 .value();
 
             return Object.keys(groups).map(key => {
                 const rowsOfCategory = groups[key];
-                const dataSet: DataSet = _.chain(rowsOfCategory)
-                    .reduce<any>((s, row) => {
+                const dataSet: DataSet = _.reduce(rowsOfCategory, (s, row) => {
                         s.values.push({
                             x: row.x,
                             y: row.y
@@ -182,16 +181,13 @@ function toDataSet(source: Source) {
                     }, {
                         key,
                         values: []
-                    })
-                    .value();
+                    });
 
                 return dataSet;
             });
 
         } else {
-            const dataSet = _.chain(rows)
-                .sortBy('0')
-                .reduce<any>((s, row) => {
+            const dataSet = _.reduce(rows, (s, row) => {
                     const x = row[source.x];
                     const y = parseInt(row[source.y]);
                     s.values.push({ x, y });
@@ -199,9 +195,8 @@ function toDataSet(source: Source) {
                 }, {
                     key: source.label,
                     values: []
-                } as DataSet)
-                .value();
-console.log(dataSet)
+                } as DataSet);
+                
             // always return one
             return [dataSet];
         }
