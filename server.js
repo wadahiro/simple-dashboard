@@ -41,7 +41,7 @@ app.get('/example/new-users.log', function (req, res) {
         res.setHeader('Cache-Control', 'no-cache');
         var sb = '';
         var x;
-        for (var i = 0; i < 1000; i++) {
+        for (var i = 0; i < 365 * 5; i++) {
             x = 1425096000 + i * 60 * 60 * 24 * 1000; // +1day
             x = new Date(x)
             x = formatDate(x, 'YYYY-MM-DD')
@@ -50,6 +50,27 @@ app.get('/example/new-users.log', function (req, res) {
         res.send(sb);
     }, 10);
 });
+
+app.get('/example/access-projects.log', function (req, res) {
+    setTimeout(function () {
+        res.setHeader('Cache-Control', 'no-cache');
+        res.send(`
+2016-01-14 338
+2016-01-15 327
+2016-01-16 28
+2016-01-17 13
+2016-01-18 315
+2016-01-19 328
+2016-01-20 331
+2016-01-21 330
+2016-01-22 307
+2016-01-23 22
+2016-01-24 13
+2016-01-25 312
+`);
+    }, 10);
+});
+
 
 app.listen(app.get('port'), function () {
     console.log('Server started: http://localhost:' + app.get('port') + '/');

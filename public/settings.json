@@ -74,6 +74,23 @@
             "options" : {
                 "height": 300
             }
+        },
+        {
+            "type": "nvd3",
+            "label": "Access Projects",
+            "sources": [
+                {
+                    "url": "./example/access-projects.log",
+                    "label": "Access",
+                    "type": "csv",
+                    "delimiter": " ",
+                    "x": 0,
+                    "y": 1
+                }
+            ],
+            "options" : {
+                "height": 300
+            }
         }
     ]
 }

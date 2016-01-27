@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { Panel, Glyphicon, Alert } from 'react-bootstrap';
-import { DashboardConfig, handleSource } from './Settings';
+import { DashboardConfig, DataSet, handleSources } from './Settings';
 import Spinner from './Spinner';
 
 interface Props extends React.Props<AbstractChart> {
@@ -10,10 +10,7 @@ interface Props extends React.Props<AbstractChart> {
 
 interface State {
     loading?: boolean;
-    xLabels?: string[];
-    datasets?: {
-        [index: string]: number[];
-    };
+    dataSets?: DataSet[];
     options?: {
         [index: string]: {
             [index: string]: string | number;
@@ -27,135 +24,72 @@ const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
 abstract class AbstractChart extends React.Component<Props, State> {
     state = {
         loading: false,
-        xLabels: [],
-        datasets: {} as any,
+        dataSets: [] as DataSet[],
         options: null,
         error: null
     };
 
     componentDidMount() {
+        const { sources } = this.props.dashboardConfig;
 
         this.setState({
             loading: true,
-            options: this.props.dashboardConfig.sources.reduce((s, x) => {
+            options: sources.reduce((s, x) => {
                 if (x.label) {
                     s[x.label] = x.options;
                 }
                 return s;
             }, {} as any)
-        }, () => {
-            
-            // fetch datasets
-            const sources = this.props.dashboardConfig.sources.map(source => handleSource(source));
-            const newOptions = Object.assign({}, this.state.options);
-            
-            // initialize with empty data
-            let xLabels = [];
-            let datasets = this.props.dashboardConfig.sources.reduce((s, x) => {
-                if (x.label) {
-                    s[x.label] = [];
-                }
-                return s;
-            }, {} as any);
-
-            Promise.all(sources)
-                .then(results => {
-                    // merge all xLabel
-                    xLabels = _.chain(results)
-                        .map(coordinates => {
-                            return coordinates.map(x => x.x);
-                        })
-                        .flatten()
-                        .sortBy()
-                        .uniq()
-                        .value();
-
-                    results.forEach((coordinates, resultIndex) => {
-                        const { label, kind } = this.props.dashboardConfig.sources[resultIndex];
-                        
-                        if (label && !kind) {
-                            let index = 0;
-                            xLabels.forEach((xLabel) => {
-                                const p = coordinates[index];
-                                if (p && p.x === xLabel) {
-                                    index++;
-                                    datasets[label].push(p.y);
-                                } else {
-                                    datasets[label].push(null);
-                                }
-                            });
-                        } else {
-                            // dynamic kinds
-                            const grouped = _.groupBy(coordinates, 'k');
-                            
-                            _.forEach(grouped, (v, kind) => {
-                                
-                                if (!datasets[kind]) {
-                                    datasets[kind] = [];
-
-                                    // add options dynamically
-                                    newOptions[kind] = Object.assign({}, this.props.dashboardConfig.sources[resultIndex].options);
-                                }
-                                
-                                let index = 0;
-                                xLabels.forEach((xLabel) => {
-                                    const p = v[index];
-                                    if (p && p.x === xLabel) {
-                                        index++;
-                                        datasets[kind].push(p.y);
-                                    } else {
-                                        datasets[kind].push(null);
-                                    }
-                                });
-                            });
-                        }
-                    });
-                    this.setState({
-                        loading: false,
-                        xLabels,
-                        datasets,
-                        options: newOptions
-                    });
-                })
-                .catch(e => {
-                    
-                    console.error('fetch error', e);
-                    this.setState({
-                        loading: false,
-                        error: 'Cannot fetch data.'
-                    });
+        }, async () => {
+            try {
+                const dataSets = await handleSources(sources);
+                const newOptions = Object.assign({}, this.state.options);
+                
+                this.setState({
+                    loading: false,
+                    dataSets,
+                    options: newOptions
                 });
-        })
+            } catch(e) {
+                console.error('fetch error', e);
+                this.setState({
+                    loading: false,
+                    error: 'Cannot fetch data.'
+                });
+            }
+        });
     }
     
     download = (e) => {
-        const labels = Object.keys(this.state.datasets);
+        // const labels = Object.keys(this.state.datasets);
         
-        const csvHeader = ([this.props.dashboardConfig.xAxisLabel].concat(labels)).join(',');
-        const csvBody = this.state.xLabels.map((x, rowIndex) => {
-            return labels.reduce((s, label) => {
-                s.push(this.state.datasets[label][rowIndex]);
-                return s;
-            }, [x]).join(',');
-        }).join('\n');
+        // const csvHeader = ([this.props.dashboardConfig.xAxisLabel].concat(labels)).join(',');
+        // const csvBody = this.state.xLabels.map((x, rowIndex) => {
+        //     return labels.reduce((s, label) => {
+        //         s.push(this.state.datasets[label][rowIndex]);
+        //         return s;
+        //     }, [x]).join(',');
+        // }).join('\n');
         
-        const blob = new Blob([ bom, `${csvHeader}\n${csvBody}` ], { "type" : "text/csv" });
+        // const blob = new Blob([ bom, `${csvHeader}\n${csvBody}` ], { "type" : "text/csv" });
         
-        if (window.navigator.msSaveBlob) { 
-            window.navigator.msSaveBlob(blob, `${this.props.dashboardConfig.label}.csv`); 
-        } else {
-            window.URL = window.URL || window['webkitURL'];
-            e.target.parentNode.href = window.URL.createObjectURL(blob);
-        }
+        // if (window.navigator.msSaveBlob) { 
+        //     window.navigator.msSaveBlob(blob, `${this.props.dashboardConfig.label}.csv`); 
+        // } else {
+        //     window.URL = window.URL || window['webkitURL'];
+        //     e.target.parentNode.href = window.URL.createObjectURL(blob);
+        // }
     };
 
     render() {
-        const xLabels = this.state.xLabels;
+        const { label } =this.props.dashboardConfig;
+        const { dataSets, loading } = this.state;
+        const hasData = dataSets.length > 0;
 
         return (
-            <Panel header={<div>{this.props.dashboardConfig.label}{ xLabels && xLabels.length > 0 && <a href='#' download={`${this.props.dashboardConfig.label}.csv`} onClick={this.download} className='pull-right'><Glyphicon glyph='cloud-download' /></a>}</div>}>
+            <Panel header={<div>{ label }{ hasData && <a href='#' download={`${ label }.csv`} onClick={this.download} className='pull-right'><Glyphicon glyph='cloud-download' /></a>}</div>}>
                 <Spinner show={this.state.loading} />
-                { xLabels && xLabels.length > 0 &&
+                { hasData &&
                     <div>
                         { this.renderChart() }
                     </div>
@@ -163,6 +97,11 @@ abstract class AbstractChart extends React.Component<Props, State> {
                 { this.state.error && 
                     <Alert bsStyle='danger'>
                         <h4>{ this.state.error }</h4>
+                    </Alert>
+                }
+                { !hasData && !loading &&
+                    <Alert bsStyle='info'>
+                        <h4>No data</h4>
                     </Alert>
                 }
             </Panel>
