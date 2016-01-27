@@ -167,7 +167,7 @@ function toDataSet(source: Source) {
                     }
                     return _.contains(source.includesCategories, x.category);
                 })
-                .groupBy(source.category)
+                .groupBy('category')
                 .value();
 
             return Object.keys(groups).map(key => {
