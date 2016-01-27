@@ -84,10 +84,7 @@ export function handleSource(source: CSVSource | TextSource | JSONSource): Promi
 }
 
 function handleCSVSource(source: CSVSource): Promise<Coordinates[]> {
-    return fetch(source.url, {
-        credentials: 'same-origin'
-    })
-        .then(handleErrors)
+    return callFetch(source.url)
         .then(x => {
             return x.text();
         })
@@ -122,10 +119,7 @@ function handleCSVSource(source: CSVSource): Promise<Coordinates[]> {
 function handleTextSource(source: TextSource): Promise<Coordinates[]> {
     const re = new RegExp(source.pattern);
 
-    return fetch(source.url, {
-        credentials: 'same-origin'
-    })
-        .then(handleErrors)
+    return callFetch(source.url)
         .then(x => {
             return x.text();
         })
@@ -148,6 +142,16 @@ function handleTextSource(source: TextSource): Promise<Coordinates[]> {
 
 function handleJSONSource(source: JSONSource): Promise<Coordinates[]> {
     throw new Error('Not implemented');
+}
+
+function callFetch<T>(url: string): Promise<Response> {
+    return fetch(url, {
+        credentials: 'same-origin',
+        headers: {
+            'If-Modified-Since': 'Tue, 01 Jun 1970 00:00:00 GMT'
+        }
+    })
+        .then(handleErrors);
 }
 
 function handleErrors(response) {
