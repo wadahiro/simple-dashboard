@@ -36,8 +36,5 @@
     "react-dom": "^0.14.6",
     "typescript": "^1.8.0-dev.20160121",
     "whatwg-fetch": "^0.10.1"
-  },
-  "peerDependencies": {
-    "react": "0.13.3"
   }
 }
