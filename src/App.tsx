@@ -3,12 +3,8 @@ import { PageHeader, Panel, Button, Row, Grid, Col } from 'react-bootstrap';
 import * as _ from 'lodash';
 
 import Spinner from './Spinner';
-import { Settings, DashboardConfig } from './Settings';
-import NVD3Chart from './NVD3Chart';
-
-require("babel-polyfill");
-require('whatwg-fetch');
-
+import { Settings } from './Settings';
+import { renderChart } from './ChartFactory';
 
 interface State {
     settings?: Settings;
@@ -74,13 +70,5 @@ export default class App extends React.Component<React.Props<App>, State> {
         } else {
             return <Spinner show={true} />;
         }
-    }
-}
-
-function renderChart(config: DashboardConfig) {
-    if (config.type === 'nvd3') {
-        return <NVD3Chart dashboardConfig={config} />;
-    } else {
-        return <NVD3Chart dashboardConfig={config} />;
     }
 }

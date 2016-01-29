@@ -1,10 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { Panel, Glyphicon } from 'react-bootstrap';
-import { DashboardConfig, handleSources } from './Settings';
-import Spinner from './Spinner';
 import AbstractChart from './AbstractChart';
-
 
 const d3 = require('d3');
 const nv = require('nvd3');
@@ -19,7 +15,7 @@ interface NVD3Schema {
     }[];
 }
 
-export default class NVD3Chart extends AbstractChart {
+export default class NVD3LineWithFocusChart extends AbstractChart {
     chart = null;
 
     renderChart() {

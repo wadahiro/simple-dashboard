@@ -3,7 +3,7 @@
     "columnSize": 2,
     "dashboard": [
         {
-            "type": "nvd3",
+            "type": "nvd3/lineWithFocusChart",
             "label": "Unique Users",
             "xAxisLabel": "Date",
             "yAxisLabel": "Unique Users",
@@ -22,7 +22,7 @@
             }
         },
         {
-            "type": "nvd3",
+            "type": "nvd3/lineWithFocusChart",
             "label": "HTTP",
             "xAxisLabel": "Date",
             "yAxisLabel": "HTTP Access",
@@ -57,7 +57,7 @@
             }
         },
         {
-            "type": "nvd3",
+            "type": "nvd3/lineWithFocusChart",
             "label": "New Users",
             "xAxisLabel": "Date",
             "yAxisLabel": "New Users",
@@ -84,7 +84,7 @@
             }
         },
         {
-            "type": "nvd3",
+            "type": "nvd3/lineWithFocusChart",
             "label": "Access Projects",
             "sources": [
                 {
