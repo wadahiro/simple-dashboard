@@ -29,7 +29,8 @@ export default class PlotlyLineChart extends AbstractChart {
 
         const layout = {
             xaxis: {
-                title: this.props.dashboardConfig.xAxisLabel
+                title: this.props.dashboardConfig.xAxisLabel,
+                tickformat: '%Y/%m/%d'
             },
             yaxis: {
                 title: this.props.dashboardConfig.yAxisLabel
