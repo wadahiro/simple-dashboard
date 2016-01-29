@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { Panel, Glyphicon, Alert } from 'react-bootstrap';
-import { DashboardConfig, DataSet, handleSources } from './Settings';
-import Spinner from './Spinner';
+import { DashboardConfig, DataSet, handleSources } from '../Settings';
+import Spinner from '../Spinner';
 
 interface Props extends React.Props<AbstractChart> {
     dashboardConfig: DashboardConfig;

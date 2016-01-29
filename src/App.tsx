@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 
 import Spinner from './Spinner';
 import { Settings } from './Settings';
-import { renderChart } from './ChartFactory';
+import { renderChart } from './chart/ChartFactory';
 
 interface State {
     settings?: Settings;

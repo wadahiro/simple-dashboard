@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import AbstractChart from './AbstractChart';
+import AbstractChart from '../AbstractChart';
 
 const d3 = require('d3');
 const nv = require('nvd3');
