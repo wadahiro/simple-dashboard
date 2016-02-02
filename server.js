@@ -86,7 +86,7 @@ app.get('/example/access-projects.log', function (req, res) {
         var sb = '';
         var x;
         for (var j = 0; j < 10; j++) {
-            for (var i = 0; i < 100; i++) {
+            for (var i = 0; i < 5; i++) {
                 x = 1425096000 + i * 60 * 60 * 24 * 1000; // +1day
                 x = new Date(x)
                 x = formatDate(x, 'YYYY-MM-DD')
