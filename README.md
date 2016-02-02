@@ -14,6 +14,8 @@ Features:
 * Generating chart. Currently, support line chart only.
 * The configuration by JSON file.
 
+[Example page is here](http://wadahiro.github.io/simple-dashboard/).
+
 ## Quick Start
 
 @TODO
@@ -70,7 +72,7 @@ You can add more source into a chart.
 ```json
     "dashboard": [
         {
-            "type": "nvd3",
+            "type": "nvd3/lineWithFocusChart",
             "label": "HTTP",
             "xAxisLabel": "Date",
             "yAxisLabel": "HTTP Access",

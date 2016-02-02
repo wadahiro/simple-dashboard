@@ -5,7 +5,6 @@ var express = require('express');
 var app = express();
 var COMMENTS_FILE = path.join(__dirname, 'comments.json');
 app.set('port', (process.env.PORT || 3000));
-app.use('/', express.static(path.join(__dirname, 'public')));
 
 
 app.get('/example/unique-users.log', function (req, res) {
@@ -96,6 +95,9 @@ app.get('/example/access-projects.log', function (req, res) {
         res.send(sb);
     }, 10);
 });
+
+
+app.use('/', express.static(path.join(__dirname, 'public')));
 
 
 app.listen(app.get('port'), function () {
