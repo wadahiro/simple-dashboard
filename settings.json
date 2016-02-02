@@ -1,0 +1,131 @@
+{
+    "title": "Simple Dashboard",
+    "columnSize": 2,
+    "dashboard": [
+        {
+            "type": "plotly/lineChart",
+            "label": "Access Projects",
+            "xAxisLabel": "Date",
+            "yAxisLabel": "Unique Users",
+            "sources": [
+                {
+                    "url": "./example/delete-users.log",
+                    "label": "Delete Users",
+                    "type": "csv",
+                    "delimiter": " ",
+                    "x": 0,
+                    "y": 1
+                },
+                {
+                    "url": "./example/new-users.log",
+                    "label": "New Users",
+                    "type": "csv",
+                    "delimiter": " ",
+                    "x": 0,
+                    "y": 1
+                }
+            ],
+            "options" : {
+                "height": 300
+            }
+        },
+        {
+            "type": "nvd3/lineWithFocusChart",
+            "label": "Unique Users",
+            "xAxisLabel": "Date",
+            "yAxisLabel": "Unique Users",
+            "sources": [
+                {
+                    "url": "./example/unique-users.log",
+                    "label": "Unique Users",
+                    "type": "text",
+                    "pattern": "(\\d{4}\\-\\d{2}\\-\\d{2}) (\\d+)",
+                    "x": 0,
+                    "y": 1
+                }
+            ],
+            "options" : {
+                "height": 300
+            }
+        },
+        {
+            "type": "nvd3/lineWithFocusChart",
+            "label": "HTTP",
+            "xAxisLabel": "Date",
+            "yAxisLabel": "HTTP Access",
+            "sources": [
+                {
+                    "url": "./example/access-home.log",
+                    "label": "/home",
+                    "type": "csv",
+                    "delimiter": " ",
+                    "x": 0,
+                    "y": 1
+                },
+                {
+                    "url": "./example/access-search.log",
+                    "label": "/search",
+                    "type": "csv",
+                    "delimiter": " ",
+                    "x": 0,
+                    "y": 1
+                },
+                {
+                    "url": "./example/access-update.log",
+                    "label": "/update",
+                    "type": "csv",
+                    "delimiter": " ",
+                    "x": 0,
+                    "y": 1
+                }
+            ],
+            "options" : {
+                "height": 300
+            }
+        },
+        {
+            "type": "nvd3/lineWithFocusChart",
+            "label": "New Users",
+            "xAxisLabel": "Date",
+            "yAxisLabel": "New Users",
+            "sources": [
+                {
+                    "url": "./example/delete-users.log",
+                    "label": "Delete Users",
+                    "type": "csv",
+                    "delimiter": " ",
+                    "x": 0,
+                    "y": 1
+                },
+                {
+                    "url": "./example/new-users.log",
+                    "label": "New Users",
+                    "type": "csv",
+                    "delimiter": " ",
+                    "x": 0,
+                    "y": 1
+                }
+            ],
+            "options" : {
+                "height": 300
+            }
+        },
+        {
+            "type": "nvd3/lineWithFocusChart",
+            "label": "Access Projects",
+            "sources": [
+                {
+                    "url": "./example/access-projects.log",
+                    "type": "csv",
+                    "delimiter": " ",
+                    "x": 0,
+                    "category": 1,
+                    "y": 2
+                }
+            ],
+            "options" : {
+                "height": 500
+            }
+        }
+    ]
+}
