@@ -8,7 +8,7 @@
   "scripts": {
     "watch": "webpack -w",
     "build": "set NODE_ENV=production && webpack -p",
-    "deploy": "gh-pages -d examples/public",
+    "deploy": "gh-pages -d public",
     "api": "node-dev server.js",
     "dev": "node-dev webpack.server.js"
   },
