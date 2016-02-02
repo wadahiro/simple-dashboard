@@ -3,6 +3,33 @@
     "columnSize": 2,
     "dashboard": [
         {
+            "type": "plotly/lineChart",
+            "label": "Access Projects",
+            "xAxisLabel": "Date",
+            "yAxisLabel": "Unique Users",
+            "sources": [
+                {
+                    "url": "./example/delete-users.log",
+                    "label": "Delete Users",
+                    "type": "csv",
+                    "delimiter": " ",
+                    "x": 0,
+                    "y": 1
+                },
+                {
+                    "url": "./example/new-users.log",
+                    "label": "New Users",
+                    "type": "csv",
+                    "delimiter": " ",
+                    "x": 0,
+                    "y": 1
+                }
+            ],
+            "options" : {
+                "height": 300
+            }
+        },
+        {
             "type": "nvd3/lineWithFocusChart",
             "label": "Unique Users",
             "xAxisLabel": "Date",
@@ -97,7 +124,7 @@
                 }
             ],
             "options" : {
-                "height": 300
+                "height": 500
             }
         }
     ]

@@ -70,7 +70,7 @@ app.get('/example/delete-users.log', function (req, res) {
         res.setHeader('Cache-Control', 'no-cache');
         var sb = '';
         var x;
-        for (var i = 0; i < (365 * 5)/2; i++) {
+        for (var i = 0; i < (365 * 5) / 2; i++) {
             x = 1425096000 + (i * 2) * 60 * 60 * 24 * 1000; // +1day
             x = new Date(x)
             x = formatDate(x, 'YYYY-MM-DD')
@@ -83,17 +83,17 @@ app.get('/example/delete-users.log', function (req, res) {
 app.get('/example/access-projects.log', function (req, res) {
     setTimeout(function () {
         res.setHeader('Cache-Control', 'no-cache');
-        res.send(`
-2016-01-14 ABC 100
-2016-01-14 OPQ 50
-2016-01-14 XYZ 200
-2016-01-15 ABC 120
-2016-01-15 OPQ 30
-2016-01-15 XYZ 150
-2016-01-16 ABC 130
-2016-01-16 OPQ 80
-2016-01-16 XYZ 90
-`);
+        var sb = '';
+        var x;
+        for (var j = 0; j < 10; j++) {
+            for (var i = 0; i < 100; i++) {
+                x = 1425096000 + i * 60 * 60 * 24 * 1000; // +1day
+                x = new Date(x)
+                x = formatDate(x, 'YYYY-MM-DD')
+                sb += x + ' ABC' + j + ' ' + Math.floor(Math.random() * (50 - 10) + 10) + '\n';
+            }
+        }
+        res.send(sb);
     }, 10);
 });
 
